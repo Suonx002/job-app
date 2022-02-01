@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import SidebarWithHeader from './sidebarWithHeader';
 
-const Sidebar = () => {
-	return <SidebarWithHeader />;
+const Sidebar: FC = ({ children }) => {
+	return <SidebarWithHeader>{children}</SidebarWithHeader>;
 };
 
 export default Sidebar;
