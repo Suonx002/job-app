@@ -33,6 +33,7 @@ const Homepage: FC = () => {
 						<Text
 							as={'span'}
 							position={'relative'}
+							color='gray800'
 							_after={{
 								content: "''",
 								width: 'full',

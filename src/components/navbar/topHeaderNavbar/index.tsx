@@ -14,13 +14,22 @@ import {
 	MenuDivider,
 	MenuItem,
 	MenuList,
+	useDisclosure,
 } from '@chakra-ui/react';
-import { FiMenu, FiBell, FiChevronDown } from 'react-icons/fi';
+import { FiMenu, FiPlusSquare, FiChevronDown } from 'react-icons/fi';
+import SimpleModal from '@src/components/modal/simpleModal';
+import JobForm from '@src/components/jobs/jobForm';
 
 interface MobileProps extends FlexProps {
 	onOpen: () => void;
 }
-const MobileNavbar = ({ onOpen, ...rest }: MobileProps) => {
+const TopHeaderNavbar = ({ onOpen, ...rest }: MobileProps) => {
+	const {
+		isOpen: isOpenJobModal,
+		onOpen: onOpenJobModal,
+		onClose: onCloseJobModal,
+	} = useDisclosure();
+
 	return (
 		<Flex
 			ml={{ base: 0, md: 60 }}
@@ -49,12 +58,22 @@ const MobileNavbar = ({ onOpen, ...rest }: MobileProps) => {
 			</Text>
 
 			<HStack spacing={{ base: '0', md: '6' }}>
+				{/* ADD NEW JOB FORM */}
 				<IconButton
 					size='lg'
 					variant='ghost'
 					aria-label='open menu'
-					icon={<FiBell />}
+					colorScheme={'secondary'}
+					icon={<FiPlusSquare fontSize={24} />}
+					onClick={onOpenJobModal}
 				/>
+				<SimpleModal
+					isOpen={isOpenJobModal}
+					onClose={onCloseJobModal}
+					modalTitle='Add Job'>
+					<JobForm onClose={onCloseJobModal} />
+				</SimpleModal>
+
 				<Flex alignItems={'center'}>
 					<Menu>
 						<MenuButton
@@ -99,4 +118,4 @@ const MobileNavbar = ({ onOpen, ...rest }: MobileProps) => {
 	);
 };
 
-export default MobileNavbar;
+export default TopHeaderNavbar;

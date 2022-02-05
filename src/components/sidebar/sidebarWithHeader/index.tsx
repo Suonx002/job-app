@@ -6,7 +6,7 @@ import {
 	DrawerContent,
 	useDisclosure,
 } from '@chakra-ui/react';
-import MobileNavbar from '@src/components/navbar/mobileNavbar';
+import TopHeaderNavbar from '@src/components/navbar/topHeaderNavbar';
 import SidebarLeftMenu from '../sidebarLeftMenu';
 
 const SidebarWithHeader: FC = ({ children }) => {
@@ -30,7 +30,7 @@ const SidebarWithHeader: FC = ({ children }) => {
 				</DrawerContent>
 			</Drawer>
 			{/* mobilenav */}
-			<MobileNavbar onOpen={onOpen} />
+			<TopHeaderNavbar onOpen={onOpen} />
 			<Box ml={{ base: 0, md: 60 }} p='4'>
 				{children}
 			</Box>

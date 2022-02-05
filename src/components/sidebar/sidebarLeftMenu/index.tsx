@@ -9,7 +9,6 @@ import {
 } from '@chakra-ui/react';
 import NavItem from '@src/components/navbar/navbarItem';
 import sidebarLinks from '../sidebarLinks';
-import { MotionBox } from '@src/libs/framers';
 
 interface SidebarProps extends BoxProps {
 	onClose: () => void;
@@ -17,8 +16,7 @@ interface SidebarProps extends BoxProps {
 
 const SidebarLeftMenu = ({ onClose, ...rest }: SidebarProps) => {
 	return (
-		<MotionBox
-			transition={{ type: 'spring', stiffness: 100 }}
+		<Box
 			bg={useColorModeValue('white', 'gray.900')}
 			borderRight='1px'
 			borderRightColor={useColorModeValue('gray.200', 'gray.700')}
@@ -33,11 +31,11 @@ const SidebarLeftMenu = ({ onClose, ...rest }: SidebarProps) => {
 				<CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
 			</Flex>
 			{sidebarLinks.map((link) => (
-				<NavItem key={link.name} icon={link.icon}>
+				<NavItem key={link.name} href={link.href} icon={link.icon}>
 					{link.name}
 				</NavItem>
 			))}
-		</MotionBox>
+		</Box>
 	);
 };
 
