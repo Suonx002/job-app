@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC, ReactNode, useState } from 'react';
 
 import {
 	Modal,
@@ -22,12 +22,29 @@ const SimpleModal: FC<SimpleModalProps> = ({
 	onClose,
 	modalTitle,
 }) => {
+	const [overlayExpand, setOverlayExpand] = useState(false);
+
+	const overlayExpandTimer = () => {
+		setOverlayExpand(true);
+
+		setTimeout(() => {
+			setOverlayExpand(false);
+		}, 500);
+	};
+
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
+		<Modal
+			isOpen={isOpen}
+			onClose={onClose}
+			closeOnOverlayClick={false}
+			onOverlayClick={overlayExpandTimer}>
 			<ModalOverlay />
 			<ModalContent>
-				<ModalHeader>{modalTitle}</ModalHeader>
-				<ModalCloseButton />
+				<ModalHeader color='secondary.500'>{modalTitle}</ModalHeader>
+				<ModalCloseButton
+					color={overlayExpand ? 'primary.500' : ''}
+					transform={overlayExpand ? 'scale(1.5)' : ''}
+				/>
 				<Divider />
 				<ModalBody>{children}</ModalBody>
 			</ModalContent>

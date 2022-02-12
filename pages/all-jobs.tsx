@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import JobForm from '@src/components/jobs/jobForm';
+import JobsList from '@src/components/jobs';
 import React from 'react';
 
 const ALlJobs = () => {
@@ -7,7 +7,7 @@ const ALlJobs = () => {
 		<Box>
 			<Box>all jobs</Box>
 			<Box>
-				<JobForm />
+				<JobsList />
 			</Box>
 		</Box>
 	);

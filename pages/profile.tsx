@@ -1,7 +1,13 @@
+import { Box } from '@chakra-ui/react';
+import Profile from '@src/components/profile';
 import React from 'react';
 
-const Profile = () => {
-	return <div>profile</div>;
+const ProfilePage = () => {
+	return (
+		<Box>
+			<Profile />
+		</Box>
+	);
 };
 
-export default Profile;
+export default ProfilePage;

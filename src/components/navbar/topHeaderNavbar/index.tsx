@@ -70,7 +70,7 @@ const TopHeaderNavbar = ({ onOpen, ...rest }: MobileProps) => {
 				<SimpleModal
 					isOpen={isOpenJobModal}
 					onClose={onCloseJobModal}
-					modalTitle='Add Job'>
+					modalTitle='Add New Job'>
 					<JobForm onClose={onCloseJobModal} />
 				</SimpleModal>
 
@@ -105,9 +105,8 @@ const TopHeaderNavbar = ({ onOpen, ...rest }: MobileProps) => {
 						<MenuList
 							bg={useColorModeValue('white', 'gray.900')}
 							borderColor={useColorModeValue('gray.200', 'gray.700')}>
+							<MenuItem>Jobs</MenuItem>
 							<MenuItem>Profile</MenuItem>
-							<MenuItem>Settings</MenuItem>
-							<MenuItem>Billing</MenuItem>
 							<MenuDivider />
 							<MenuItem>Sign out</MenuItem>
 						</MenuList>
