@@ -8,6 +8,8 @@ import {
 	useBreakpointValue,
 	useDisclosure,
 } from '@chakra-ui/react';
+import { GetServerSidePropsContext } from 'next';
+import { getSession } from 'next-auth/react';
 import { FC } from 'react';
 import Login from '../auth/login';
 import Register from '../auth/register';

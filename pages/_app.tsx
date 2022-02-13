@@ -4,7 +4,13 @@ import customTheme from '@styles/theme';
 import { ChakraProvider } from '@chakra-ui/react';
 import Sidebar from '@src/components/sidebar';
 
-function MyApp({ Component, pageProps, ...appProps }: AppProps) {
+import { SessionProvider } from 'next-auth/react';
+
+function MyApp({
+	Component,
+	pageProps: { session, ...pageProps },
+	...appProps
+}: AppProps) {
 	const getContent = () => {
 		console.log({
 			pathname: appProps.router.pathname,
@@ -21,9 +27,11 @@ function MyApp({ Component, pageProps, ...appProps }: AppProps) {
 	};
 
 	return (
-		<ChakraProvider theme={customTheme} resetCSS>
-			{getContent()}
-		</ChakraProvider>
+		<SessionProvider session={session}>
+			<ChakraProvider theme={customTheme} resetCSS>
+				{getContent()}
+			</ChakraProvider>
+		</SessionProvider>
 	);
 }
 

@@ -19,6 +19,8 @@ import {
 import { FiMenu, FiPlusSquare, FiChevronDown } from 'react-icons/fi';
 import SimpleModal from '@src/components/modal/simpleModal';
 import JobForm from '@src/components/jobs/jobForm';
+import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 interface MobileProps extends FlexProps {
 	onOpen: () => void;
@@ -29,6 +31,8 @@ const TopHeaderNavbar = ({ onOpen, ...rest }: MobileProps) => {
 		onOpen: onOpenJobModal,
 		onClose: onCloseJobModal,
 	} = useDisclosure();
+
+	const router = useRouter();
 
 	return (
 		<Flex
@@ -108,7 +112,13 @@ const TopHeaderNavbar = ({ onOpen, ...rest }: MobileProps) => {
 							<MenuItem>Jobs</MenuItem>
 							<MenuItem>Profile</MenuItem>
 							<MenuDivider />
-							<MenuItem>Sign out</MenuItem>
+							<MenuItem
+								onClick={() => {
+									signOut();
+									router.push('/');
+								}}>
+								Logout
+							</MenuItem>
 						</MenuList>
 					</Menu>
 				</Flex>

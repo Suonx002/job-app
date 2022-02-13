@@ -21,6 +21,8 @@
       "@libs/*": ["src/libs/*"],
       "@api/*": ["pages/api/*"],
       "@styles/*": ["styles/*"],
+      "@functionHelpers/*": ["functionHelpers/*"],
+
 
     }
 

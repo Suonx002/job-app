@@ -5,7 +5,6 @@ import React from 'react';
 const ALlJobs = () => {
 	return (
 		<Box>
-			<Box>all jobs</Box>
 			<Box>
 				<JobsList />
 			</Box>
