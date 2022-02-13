@@ -17,7 +17,7 @@ export default NextAuth({
 	// 	jwt: true,
 	// },
 	pages: {
-		// signIn: '/sign-in',
+		// signIn: '/',
 		// signOut: "/auth/logout",
 		// error: "/auth/error", // Error code passed in query string as ?error=
 	},
@@ -111,36 +111,57 @@ export default NextAuth({
 		}),
 	],
 	callbacks: {
+		// async signIn({ user, account, profile, email, credentials }) {
+		// 	console.log('fire signin Callback');
+		// 	return true;
+		// },
+		// async redirect({ url, baseUrl }) {
+		// 	return url.startsWith(baseUrl) ? url : baseUrl;
+		// },
+		// async jwt({ token, user, account, profile, isNewUser }) {
+		// 	console.log('fire jwt Callback');
+
+		// 	if (user) {
+		// 		token.id = user.id;
+		// 		token.role = user.role;
+		// 	}
+		// 	return token;
+		// },
+		// async session({ session, token, user }) {
+		// 	console.log('fire session Callback');
+
+		// 	// const sess: Session = {
+		// 	// 	...session,
+		// 	// 	user: {
+		// 	// 		...session.user,
+		// 	// 		id: token.id as string,
+		// 	// 		role: token.role as string,
+		// 	// 	},
+		// 	// };
+		// 	// return sess;
+
+		// 	return session;
+		// },
+
 		async signIn({ user, account, profile, email, credentials }) {
 			console.log('fire signin Callback');
+
 			return true;
 		},
-		async redirect({ url, baseUrl }) {
-			return url.startsWith(baseUrl) ? url : baseUrl;
-		},
-		async jwt({ token, user, account, profile, isNewUser }) {
-			console.log('fire jwt Callback');
+		// async redirect({ url, baseUrl }) {
+		// 	console.log('fire redirect Callback');
 
-			if (user) {
-				token.id = user.id;
-				token.role = user.role;
-			}
-			return token;
-		},
-		async session({ session, token, user }) {
+		// 	return baseUrl;
+		// },
+		async session({ session, user, token }) {
 			console.log('fire session Callback');
-
-			// const sess: Session = {
-			// 	...session,
-			// 	user: {
-			// 		...session.user,
-			// 		id: token.id as string,
-			// 		role: token.role as string,
-			// 	},
-			// };
-			// return sess;
 
 			return session;
 		},
+		// async jwt({ token, user, account, profile, isNewUser }) {
+		// 	console.log('fire jwt Callback');
+
+		// 	return token;
+		// },
 	},
 });

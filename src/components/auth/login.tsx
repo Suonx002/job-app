@@ -13,15 +13,18 @@ import {
 	useColorModeValue,
 	useToast,
 	FormErrorMessage,
+	Icon,
 } from '@chakra-ui/react';
 
 import { useState } from 'react';
-import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+
+import { AiFillGithub } from 'react-icons/ai';
+import { GetServerSidePropsContext } from 'next';
 
 import {
 	getSession,
@@ -42,7 +45,7 @@ const Login = ({
 
 	const router = useRouter();
 
-	console.log({ session });
+	console.log({ csrfToken, providers, session });
 
 	const userSchema = yup.object().shape({
 		email: yup.string().required('Email is required'),
@@ -74,6 +77,12 @@ const Login = ({
 		},
 	});
 
+	const handleProviderSignIn = (provider) => {
+		signIn(provider.id, {
+			callbackUrl: '/dashboard',
+		});
+	};
+
 	const onSubmitHandler = async (values: any) => {
 		setSubmitting(true);
 		try {
@@ -97,7 +106,9 @@ const Login = ({
 			}
 
 			if (loginUser?.ok) {
-				router.push('/dashboard');
+				window.location.reload();
+
+				// router.push('/dashboard');
 			}
 		} catch (error) {
 			toast({
@@ -113,6 +124,7 @@ const Login = ({
 	return (
 		<Flex
 			as='form'
+			flexDirection={'column'}
 			align={'center'}
 			justify={'center'}
 			onSubmit={handleSubmit(onSubmitHandler)}>
@@ -199,28 +211,24 @@ const Login = ({
 					</Flex>
 				</Box>
 			</Stack>
+
+			{/* Github Providers */}
+			<Flex flexDirection={'column'}>
+				{providers?.length &&
+					providers.map((provider) => {
+						return (
+							<Button
+								key={provider}
+								type='button'
+								onClick={() => handleProviderSignIn(provider)}>
+								<Icon as={AiFillGithub} />
+								<p>{provider.name}</p>
+							</Button>
+						);
+					})}
+			</Flex>
 		</Flex>
 	);
 };
 
 export default Login;
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-	const session = await getSession(context);
-
-	// if (session) {
-	// 	return { redirect: { permanent: false, destination: '/dashboard' } };
-	// }
-
-	const csrfToken = await getCsrfToken({ req: context.req });
-	const providers = await getProviders();
-	if (providers) {
-		providers.filter((provider) => {
-			return provider.type !== 'credentials';
-		});
-	}
-
-	return {
-		props: { csrfToken, providers, session },
-	};
-}

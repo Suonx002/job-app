@@ -36,6 +36,7 @@ const Register = ({
 	onOpenLoginModal,
 	csrfToken,
 	providers,
+	session,
 }) => {
 	const [isSubmitting, setSubmitting] = useState(false);
 	const toast = useToast();
@@ -131,6 +132,8 @@ const Register = ({
 			console.log({ registerUser });
 			if (registerUser?.ok) {
 				// router.push('/dashboard');
+				window.location.reload();
+				setSubmitting(false);
 			}
 		} catch (error) {
 			console.error(error);
@@ -227,23 +230,3 @@ const Register = ({
 };
 
 export default Register;
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-	const session = await getSession(context);
-
-	// if (session) {
-	// 	return { redirect: { permanent: false, destination: '/dashboard' } };
-	// }
-
-	const csrfToken = await getCsrfToken({ req: context.req });
-	const providers = await getProviders();
-	if (providers) {
-		providers.filter((provider) => {
-			return provider.type !== 'credentials';
-		});
-	}
-
-	return {
-		props: { csrfToken, providers },
-	};
-}

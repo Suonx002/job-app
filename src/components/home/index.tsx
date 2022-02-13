@@ -8,14 +8,13 @@ import {
 	useBreakpointValue,
 	useDisclosure,
 } from '@chakra-ui/react';
-import { GetServerSidePropsContext } from 'next';
-import { getSession } from 'next-auth/react';
+
 import { FC } from 'react';
 import Login from '../auth/login';
 import Register from '../auth/register';
 import SimpleModal from '../modal/authModal';
 
-const Homepage: FC = () => {
+const Homepage: FC = ({ csrfToken, providers, session }) => {
 	const {
 		isOpen: isOpenLoginModal,
 		onOpen: onOpenLoginModal,
@@ -77,6 +76,9 @@ const Homepage: FC = () => {
 						onClose={onCloseLoginModal}
 						isOpen={isOpenLoginModal}>
 						<Login
+							csrfToken={csrfToken}
+							providers={providers}
+							session={session}
 							onCloseLoginModal={onCloseLoginModal}
 							onOpenRegisterModal={onOpenRegisterModal}
 						/>
@@ -88,6 +90,9 @@ const Homepage: FC = () => {
 						onClose={onCloseRegisterModal}
 						isOpen={isOpenRegisterModal}>
 						<Register
+							csrfToken={csrfToken}
+							providers={providers}
+							session={session}
 							onCloseRegisterModal={onCloseRegisterModal}
 							onOpenLoginModal={onOpenLoginModal}
 						/>

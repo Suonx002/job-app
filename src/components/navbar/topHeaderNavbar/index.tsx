@@ -114,7 +114,7 @@ const TopHeaderNavbar = ({ onOpen, ...rest }: MobileProps) => {
 							<MenuDivider />
 							<MenuItem
 								onClick={() => {
-									signOut();
+									signOut({ redirect: false });
 									router.push('/');
 								}}>
 								Logout
