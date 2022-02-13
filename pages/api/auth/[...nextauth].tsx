@@ -2,17 +2,17 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GitHubProvider from 'next-auth/providers/github';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { PrismaClient } from '@prisma/client';
 
 import { verifyPassword, hashPassword } from '@functionHelpers/auth/passwords';
-import prisma from '@functionHelpers/initDB';
-import { Session } from '@functionHelpers/auth/session';
+// import prisma from '@functionHelpers/initDB';
+// import { Session } from '@functionHelpers/auth/session';
+
+const prisma = new PrismaClient();
 
 export default NextAuth({
 	adapter: PrismaAdapter(prisma),
 	secret: process.env.NEXTAUTH_SECRET,
-	jwt: {
-		secret: 'helloworld',
-	},
 	// session: {
 	// 	jwt: true,
 	// },
@@ -85,6 +85,10 @@ export default NextAuth({
 						// login process calling
 						// user existed, need to verify user credentials
 
+						if (!maybeUser) {
+							throw new Error('No user found. Please create one');
+						}
+
 						if (!credentials.password || !credentials.email) {
 							throw new Error('Please fill out all of the information');
 						}
@@ -105,69 +109,18 @@ export default NextAuth({
 				}
 			},
 		}),
-		// CredentialsProvider({
-		// 	id: 'admin-login',
-		// 	name: 'Administrator Login',
-		// 	credentials: {
-		// 		email: {
-		// 			label: 'Email Address',
-		// 			type: 'email',
-		// 			placeholder: 'john.doe@example.com',
-		// 		},
-		// 		password: {
-		// 			label: 'Password',
-		// 			type: 'password',
-		// 			placeholder: 'Your super secure password',
-		// 		},
-		// 	},
-		// 	async authorize(credentials) {
-		// 		let maybeUser = await prisma.user.findFirst({
-		// 			where: {
-		// 				email: credentials.email,
-		// 			},
-		// 			select: {
-		// 				id: true,
-		// 				email: true,
-		// 				password: true,
-		// 				name: true,
-		// 				role: true,
-		// 			},
-		// 		});
-
-		// 		if (!maybeUser) {
-		// 			throw new Error('Unauthorized.');
-		// 		}
-
-		// 		if (maybeUser?.role !== 'admin') {
-		// 			throw new Error('Unauthorized.');
-		// 		}
-
-		// 		const isValid = await verifyPassword(
-		// 			credentials.password,
-		// 			maybeUser.password
-		// 		);
-
-		// 		if (!isValid) {
-		// 			throw new Error('Invalid Credentials');
-		// 		}
-
-		// 		return {
-		// 			id: maybeUser.id,
-		// 			email: maybeUser.email,
-		// 			name: maybeUser.name,
-		// 			role: maybeUser.role,
-		// 		};
-		// 	},
-		// }),
 	],
 	callbacks: {
 		async signIn({ user, account, profile, email, credentials }) {
+			console.log('fire signin Callback');
 			return true;
 		},
 		async redirect({ url, baseUrl }) {
 			return url.startsWith(baseUrl) ? url : baseUrl;
 		},
 		async jwt({ token, user, account, profile, isNewUser }) {
+			console.log('fire jwt Callback');
+
 			if (user) {
 				token.id = user.id;
 				token.role = user.role;
@@ -175,15 +128,19 @@ export default NextAuth({
 			return token;
 		},
 		async session({ session, token, user }) {
-			const sess: Session = {
-				...session,
-				user: {
-					...session.user,
-					id: token.id as string,
-					role: token.role as string,
-				},
-			};
-			return sess;
+			console.log('fire session Callback');
+
+			// const sess: Session = {
+			// 	...session,
+			// 	user: {
+			// 		...session.user,
+			// 		id: token.id as string,
+			// 		role: token.role as string,
+			// 	},
+			// };
+			// return sess;
+
+			return session;
 		},
 	},
 });

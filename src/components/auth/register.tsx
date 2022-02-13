@@ -128,8 +128,9 @@ const Register = ({
 				setSubmitting(false);
 			}
 
+			console.log({ registerUser });
 			if (registerUser?.ok) {
-				router.push('/dashboard');
+				// router.push('/dashboard');
 			}
 		} catch (error) {
 			console.error(error);
