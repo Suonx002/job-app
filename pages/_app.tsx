@@ -12,10 +12,10 @@ function MyApp({
 	...appProps
 }: AppProps) {
 	const getContent = () => {
-		console.log({
-			pathname: appProps.router.pathname,
-			isTrue: [`/`].includes(appProps.router.pathname),
-		});
+		// console.log({
+		// 	pathname: appProps.router.pathname,
+		// 	isTrue: [`/`].includes(appProps.router.pathname),
+		// });
 		if ([`/`].includes(appProps.router.pathname))
 			return <Component {...pageProps} />;
 

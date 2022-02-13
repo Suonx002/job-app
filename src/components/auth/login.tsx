@@ -106,9 +106,11 @@ const Login = ({
 			}
 
 			if (loginUser?.ok) {
-				window.location.reload();
-
+				// window.location.reload();
 				// router.push('/dashboard');
+				const session = await getSession();
+				console.log({ inside: session });
+				setSubmitting(false);
 			}
 		} catch (error) {
 			toast({

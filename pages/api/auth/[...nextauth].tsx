@@ -5,8 +5,6 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { PrismaClient } from '@prisma/client';
 
 import { verifyPassword, hashPassword } from '@functionHelpers/auth/passwords';
-// import prisma from '@functionHelpers/initDB';
-// import { Session } from '@functionHelpers/auth/session';
 
 const prisma = new PrismaClient();
 
@@ -17,11 +15,21 @@ export default NextAuth({
 	// 	jwt: true,
 	// },
 	pages: {
-		// signIn: '/',
+		// signIn: '/auth/signin',
 		// signOut: "/auth/logout",
 		// error: "/auth/error", // Error code passed in query string as ?error=
 	},
-	site: process.env.NEXTAUTH_URL || 'http://localhost:3000',
+	logger: {
+		error(code, metadata) {
+			console.log({ type: 'inside error logger', code, metadata });
+		},
+		warn(code) {
+			console.log({ type: 'inside warn logger', code });
+		},
+		debug(code, metadata) {
+			console.log({ type: 'inside debug logger', code, metadata });
+		},
+	},
 	providers: [
 		GitHubProvider({
 			clientId: process.env.GITHUB_CLIENT_ID,
@@ -49,8 +57,7 @@ export default NextAuth({
 				},
 			},
 			async authorize(credentials, req) {
-				console.log({ credentials });
-
+				console.log('Starting the signup/login process ---');
 				try {
 					let maybeUser = await prisma.user.findFirst({
 						where: {
@@ -72,6 +79,7 @@ export default NextAuth({
 
 							maybeUser = await prisma.user.create({
 								data: {
+									name: `${credentials.firstName} ${credentials.lastName}`,
 									firstName: credentials.firstName,
 									lastName: credentials.lastName,
 									email: credentials.email,
@@ -79,7 +87,7 @@ export default NextAuth({
 								},
 							});
 						} else {
-							throw new Error('User already existed, please login.', 400);
+							throw new Error('User already existed, please login.');
 						}
 					} else {
 						// login process calling
@@ -102,6 +110,8 @@ export default NextAuth({
 						}
 					}
 
+					console.log('Ending the signup/login process ---');
+
 					return maybeUser;
 				} catch (error) {
 					console.log(error);
@@ -111,57 +121,23 @@ export default NextAuth({
 		}),
 	],
 	callbacks: {
-		// async signIn({ user, account, profile, email, credentials }) {
-		// 	console.log('fire signin Callback');
-		// 	return true;
-		// },
-		// async redirect({ url, baseUrl }) {
-		// 	return url.startsWith(baseUrl) ? url : baseUrl;
-		// },
-		// async jwt({ token, user, account, profile, isNewUser }) {
-		// 	console.log('fire jwt Callback');
-
-		// 	if (user) {
-		// 		token.id = user.id;
-		// 		token.role = user.role;
-		// 	}
-		// 	return token;
-		// },
-		// async session({ session, token, user }) {
-		// 	console.log('fire session Callback');
-
-		// 	// const sess: Session = {
-		// 	// 	...session,
-		// 	// 	user: {
-		// 	// 		...session.user,
-		// 	// 		id: token.id as string,
-		// 	// 		role: token.role as string,
-		// 	// 	},
-		// 	// };
-		// 	// return sess;
-
-		// 	return session;
-		// },
-
 		async signIn({ user, account, profile, email, credentials }) {
 			console.log('fire signin Callback');
-
 			return true;
 		},
-		// async redirect({ url, baseUrl }) {
-		// 	console.log('fire redirect Callback');
-
-		// 	return baseUrl;
-		// },
+		async redirect({ url, baseUrl }) {
+			console.log('fire redirect Callback');
+			return baseUrl;
+		},
 		async session({ session, user, token }) {
-			console.log('fire session Callback');
-
+			console.log('fire SESSION Callback');
 			return session;
 		},
-		// async jwt({ token, user, account, profile, isNewUser }) {
-		// 	console.log('fire jwt Callback');
+		async jwt({ token, user, account, profile, isNewUser }) {
+			console.log('fire jwt Callback');
 
-		// 	return token;
-		// },
+			// console.log({ token, user, account, profile, isNewUser });
+			return token;
+		},
 	},
 });

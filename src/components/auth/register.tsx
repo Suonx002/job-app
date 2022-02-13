@@ -132,7 +132,7 @@ const Register = ({
 			console.log({ registerUser });
 			if (registerUser?.ok) {
 				// router.push('/dashboard');
-				window.location.reload();
+				// window.location.reload();
 				setSubmitting(false);
 			}
 		} catch (error) {
